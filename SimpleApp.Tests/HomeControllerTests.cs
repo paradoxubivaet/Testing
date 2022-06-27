@@ -27,6 +27,8 @@ namespace SimpleApp.Tests
                 new Product { Name = "P3", Price = 110M}
             };
             var mock = new Mock<IDataSource>();
+
+            // Устанавливает реализацию свойства Products
             mock.SetupGet(m => m.Products).Returns(testData);
             var controller = new HomeController();
             controller.dataSource = mock.Object;
@@ -39,6 +41,9 @@ namespace SimpleApp.Tests
             Assert.Equal(testData, model,
                 Comparer.Get<Product>((p1, p2) => p1.Name == p2.Name && 
                                                   p1.Price == p2.Price));
+
+            // Проверяет, что свойство Products было вызвано один раз.
+            // Times.Once - если свойство было прочитано не один раз, то вызывается исключение.
             mock.VerifyGet(m => m.Products, Times.Once);
         }
     }
